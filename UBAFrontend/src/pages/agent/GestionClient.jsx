@@ -8,24 +8,24 @@ import speak from '../../assets/speaking.png';
 export function GestionClient() {
     const [tickets, setTickets] = useState([]);
 
-    // Charger les tickets en attente
+    
     useEffect(() => {
         fetchTickets();
+        document.title = "Gestion-des-clients"
     }, []);
 
     const fetchTickets = () => {
-        fetch('http://localhost:4000/api/tickets/en-attente') // 🔹 Mets l'URL de ton serveur backend
+        fetch('http://localhost:4000/api/tickets/en-attente') 
             .then((response) => response.json())
             .then(data => {
-                console.log("Données reçues :", data); // 🔍 Vérification des données
-                setTickets(data);
+                console.log("Données reçues :", data);
+                setTickets(Array.isArray(data) ? data : []); 
             })
             .catch((error) => console.error('Erreur chargement tickets:', error));
     };
 
     // Fonction pour appeler un client
     const appelerClient = (ticket) => {
-        // 1️⃣ Lire le nom du client avec SpeechSynthesis
         const synth = window.speechSynthesis;
         const utterance = new SpeechSynthesisUtterance(`Le client ${ticket.nom}, numéro ${ticket.numero}, est attendu`);
         utterance.lang = 'fr-FR';

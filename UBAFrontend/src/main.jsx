@@ -7,6 +7,11 @@ import { Login } from './pages/Login.jsx'
 import { Services } from './pages/client/Services.jsx'
 import { GestionClient } from './pages/agent/GestionClient.jsx'
 import {GestionUtilisateur} from "./pages/admin/GestionUtilisateur.jsx";
+import {GestionGuichets} from "./pages/admin/GestionGuichet.jsx";
+import {EvaluationPerformance} from "./pages/admin/EvaluationPerformance.jsx";
+import {EvaluationService} from "./pages/admin/EvaluationService.jsx";
+import {GestionService} from "./pages/admin/GestionService.jsx";
+import { NotFound } from './pages/NotFound.jsx'
 
 const router = createBrowserRouter([
   {
@@ -26,13 +31,33 @@ const router = createBrowserRouter([
     element: <Services/>
   },
   {
-    path:'/gestion-client',
+    path:'agent/gestion-clients',
     element : <GestionClient/>
   },
   {
-    path:'/gestion-utilisateur',
+    path:'/admin/gestion-utilisateurs',
     element : <GestionUtilisateur/>
   },
+  {
+    path:'/admin/gestion-guichet',
+    element:<GestionGuichets/>
+  },
+  {
+    path:'/admin/evaluation-performance',
+    element : <EvaluationPerformance/>
+  },
+  {
+    path:'/admin/evaluation-service',
+    element:<EvaluationService/>
+  },
+  {
+    path:'/admin/gestion-service',
+    element : <GestionService/>
+  },
+  {
+    path:"*",
+    element:<NotFound/>
+  }
 ])
 
 createRoot(document.getElementById('root')).render(

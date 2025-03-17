@@ -1,14 +1,20 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import logoUba from '../../assets/logo-uba.png'
 import { Input } from '../../components/forms/Input'
 import { Button } from '../../components/forms/Button'
 import axios from 'axios'
 export function Services(){
 
+    useEffect(()=>{
+        document.title = "Client-Portail"
+    },[])
+
     const [showForm, setShowForm] = useState(false)
     const [serviceName, setServiceName] = useState('')
     const[formData, setFormData] = useState({ nom: '', postnom: '', prenom:'', service:''});
+
+
     const toogleForm = () => {
         setShowForm(!showForm)
     }
@@ -37,8 +43,6 @@ export function Services(){
                 prenom: formData.prenom,
                 service: serviceName,
             });
-    
-            alert(response.data.message);
             setShowForm(false);
             setFormData({ nom: '', postnom: '', prenom: '' });
         } catch (error) {
@@ -52,7 +56,7 @@ export function Services(){
             <div className='flex items-center italic'>
                 <img src={logoUba} className='h-16 w-auto' /> <span className='text-4xl text-customRed'>SERVICES</span>
             </div>
-            <p className='italic text-xl'>BIENVENU SUR LE PORTAIL CLIENT, CHOISISSEZ VOTRE SERVICES</p>
+            <p className='italic text-xl'>BIENVENU SUR LE PORTAIL CLIENT, CHOISISSEZ VOTRE SERVICE</p>
         </div>
         
         

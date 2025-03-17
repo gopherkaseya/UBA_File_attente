@@ -1,47 +1,95 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import logoUba from '../../assets/logo-uba.png';
 import home from '../../assets/home.png';
 import management from '../../assets/campaign-management.png';
 import profile from '../../assets/profile.png';
 import speak from '../../assets/speaking.png';
+import Navbar from '../../components/Navbar';
+import {Input} from "../../components/forms/Input.jsx";
 
 export function GestionUtilisateur() {
-    // Fonction pour appeler un client (simulation)
-    const appelerClient = () => {
-        const synth = window.speechSynthesis;
-        const utterance = new SpeechSynthesisUtterance("Le client est attendu");
-        utterance.lang = 'fr-FR';
-        synth.speak(utterance);
+
+    const [showForm, setShowForm] = useState(false);
+    const [formData, setFormData] = useState({
+        nomservice: '',
+        descriptionService: ''
+    });
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        // Simulation de l'envoi du formulaire
+        setTimeout(() => {
+            console.log("Données envoyées :", formData);
+            setLoading(false);
+            setShowForm(false);
+        }, 2000);
+    };
+
 
     return (
         <div className="h-screen flex bg-customRed">
-            {/* Sidebar */}
             <div className="h-screen w-96 bg-customRed flex justify-center">
-                <div className='justify-center'>
-                    <div className='flex justify-center'>
-                        <img src={logoUba} className='h-10 mt-8' />
-                    </div>
-                    <button className='bg-white justify-center w-full pt-2 pb-2 pl-5 pr-5 mt-10 w-48 rounded-lg flex items-center'>
-                        <img src={home} className='h-5 pr-4'/>
-                        <span className='text-xl font-bold text-customRed font-roboto'>Acceuil</span>
-                    </button>
-                    <button className='bg-white justify-center w-full pt-2 pb-2 pl-5 pr-5 mt-10 rounded-lg flex items-center'>
-                        <img src={management} className='h-5 pr-4'/>
-                        <span className='text-xl font-bold text-customRed font-roboto'>Gestion des users</span>
-                    </button>
-                    <button className='bg-white justify-center w-full pt-2 pb-2 pl-5 pr-5 mt-10 rounded-lg flex items-center'>
-                        <img src={management} className='h-5 pr-4'/>
-                        <span className='text-xl font-bold text-customRed font-roboto'>Gestion des services</span>
-                    </button>
-                    <button className='bg-white justify-center w-full pt-2 pb-2 pl-5 pr-5 mt-10 rounded-lg flex items-center'>
-                        <img src={management} className='h-5 pr-4'/>
-                        <span className='text-xl font-bold text-customRed font-roboto'>Listes clients</span>
-                    </button>
-                </div>
+                <Navbar/>
             </div>
-
             {/* Contenu Principal */}
+            {showForm && (
+                <>
+                    <div className="fixed inset-0 bg-black opacity-70 z-10"></div>
+                    <div className="fixed bg-white w-96 z-20 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 p-10 rounded-lg shadow-lg">
+                        <form onSubmit={handleSubmit}>
+                            <Input
+                                type="text"
+                                name="nom"
+                                placeholder="nom"
+                                label="Nom agent"
+                                value={formData.nom}
+                                onChange={handleChange}
+                                required
+                            />
+                            <Input
+                                type="text"
+                                name="postnom"
+                                placeholder="postnom"
+                                label="Postnom"
+                                value={formData.postnom}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            <Input
+                                type="text"
+                                name="descriptionService"
+                                placeholder="Description"
+                                label="Description du service"
+                                value={formData.prenom}
+                                onChange={handleChange}
+                                required
+                            />
+                            <button
+                                type="submit"
+                                className="w-full font-comfortaa rounded-lg h-10 mt-5 text-white bg-green-600"
+                                disabled={loading}
+                            >
+                                {loading ? "Ajout..." : "Valider"}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setShowForm(false)}
+                                className="w-full font-comfortaa rounded-lg h-10 mt-5 text-white bg-customRed"
+                            >
+                                Annuler
+                            </button>
+                        </form>
+                    </div>
+                </>
+            )}
             <div className="bg-white w-full">
                 <div className='items-center justify-between flex ml-10 mr-10 mt-10'>
                     <div className='justify-start'>
@@ -52,27 +100,44 @@ export function GestionUtilisateur() {
                         <img src={profile} className='h-10'/>
                     </div>
                 </div>
-
-                {/* Exemple de ticket statique */}
-                <div className='ml-10 mt-14'>
-                    <div className='flex items-center justify-center bg-customRed w-72 justify-between rounded-md p-4 mb-4'>
-                        <div>
-                            <p className='text-white font-bold font-roboto text-xl'>TICKET : 001</p>
-                            <p className='text-white font-bold font-roboto text-md'>Nom du client</p>
-                        </div>
-                        <div>
-                            <div className='flex justify-center mb-1'>
-                                <img src={speak} className='h-8'/>
-                            </div>
-                            <button
-                                className='bg-white text-customRed pl-4 pr-4 pt-1 pb-1 rounded-md font-bold'
-                                onClick={appelerClient}
-                            >
-                                Appeler
-                            </button>
-                        </div>
+                <div className="p-10">
+                    <div className="flex justify-between items-center mb-5">
+                        <h2 className="text-2xl font-bold">Liste des utilisateurs</h2>
+                        <button onClick={() => setShowForm(true)}  className="bg-customRed text-white px-4 py-2 rounded-lg">Ajouter un utilisateur</button>
                     </div>
+
+                    <table className="w-full border-collapse border border-gray-300">
+                        <thead>
+                        <tr className="bg-gray-100">
+                            <th className="border border-gray-300 p-2">Nom</th>
+                            <th className="border border-gray-300 p-2">Email</th>
+                            <th className="border border-gray-300 p-2">Service</th>
+                            <th className="border border-gray-300 p-2">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr className="text-center">
+                            <td className="border border-gray-300 p-2">Jean Dupont</td>
+                            <td className="border border-gray-300 p-2">jean.dupont@email.com</td>
+                            <td className="border border-gray-300 p-2">Carte bancaire</td>
+                            <td className="border border-gray-300 p-2">
+                                <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Modifier</button>
+                                <button className="bg-red-500 text-white px-3 py-1 rounded">Supprimer</button>
+                            </td>
+                        </tr>
+                        <tr className="text-center">
+                            <td className="border border-gray-300 p-2">Marie Curie</td>
+                            <td className="border border-gray-300 p-2">marie.curie@email.com</td>
+                            <td className="border border-gray-300 p-2">Compte Bancaire</td>
+                            <td className="border border-gray-300 p-2">
+                                <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">Modifier</button>
+                                <button className="bg-red-500 text-white px-3 py-1 rounded">Supprimer</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
+
             </div>
         </div>
     );
